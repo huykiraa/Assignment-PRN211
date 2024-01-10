@@ -1,0 +1,21 @@
+﻿@model Product
+<div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
+    <div class="featured__item">
+        <div class="featured__item__pic set-bg" data-setbg="@Model.Image" style="background-image: url(&quot;img/featured/feature-1.jpg&quot;);">
+            <ul class="featured__item__pic__hover">
+                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                <li><a href="#"><i class="fa fa-retweet"></i></a></li>
+                <li><a asp-action="ThemVaoGiohang" asp-route-pid="@Model.Id" asp-route-amount="1" asp-route-address="1"><i class="fa fa-shopping-cart"></i></a></li>
+            </ul>
+        </div>
+        <div class="featured__item__text">
+            <h6>
+                <a asp-action="ChiTietSanPham" asp-controller="Home" asp-route-sid="@Model.Id">@Model.Name</a>
+
+            </h6>
+            <h5>@Model.Price</h5>
+        </div>
+        
+    </div>
+    <p style="color:red">@TempData["ProductNull"]</p>
+</div>

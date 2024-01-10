@@ -1,0 +1,191 @@
+﻿@using Project_PRN211.Models;
+@using X.PagedList.Mvc.Core;
+@using static Project_PRN211.Controllers.HomeController;
+@model X.PagedList.IPagedList<CartProductViewModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "ListCart";
+    Layout = "~/Views/Shared/_LayoutOgani.cshtml";
+}
+<style>
+    /* CSS để tạo giao diện liên kết đẹp hơn */
+    .custom-link {
+        color: #000; /* Màu chữ cho liên kết */
+        text-decoration: none; /* Loại bỏ đường gạch chân mặc định của liên kết */
+        padding: 5px 10px; /* Tăng khoảng cách xung quanh nội dung liên kết */
+        transition: color 0.3s; /* Hiệu ứng màu khi hover */
+    }
+
+        .custom-link:hover {
+            color: red; /* Màu chữ khi hover */
+        }
+
+    .separator {
+        margin: 0 5px; /* Khoảng cách giữa các phần tử */
+    }
+
+    .delete-link {
+        color: #000; /* Màu chữ cho liên kết */
+        text-decoration: none; /* Loại bỏ đường gạch chân mặc định của liên kết */
+        padding: 5px 10px; /* Tăng khoảng cách xung quanh nội dung liên kết */
+        transition: color 0.3s; /* Hiệu ứng màu khi hover */
+    }
+
+        .delete-link:hover {
+            color: red; /* Màu chữ khi hover */
+        }
+</style>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<h1>ListCart</h1>
+<p style="color:red">@TempData["Message"]</p>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>
+                Total
+            </th>
+            <th style="width:100px">
+                Receiving Address
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            <tr>
+                
+                <td>
+                    <img src="@item.Product?.Image" alt="Product Image" style="max-width: 100px; max-height: 100px;" />
+                </td>
+
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Name)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Product.Price)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Title)
+            </td>
+                <td>
+                     
+                    @*@Html.DisplayFor(modelItem => item.Cart.Amount)*@
+                    <form asp-action="EditCard" asp-route-pId="@item.Cart.ProductId" method="post">
+                        <div class="product__details__quantity">
+                            <div class="quantity">
+                                <div class="pro-qty">
+                                    <input name="amount" type="text" value="@item.Cart.Amount">
+                                </div>
+                            </div>
+                        </div>
+                        @if (@item.ProductSolds != null && @item.Cart != null && @item.ProductSolds.ProductId == @item.Cart.ProductId && @item.ProductSolds.UId == @item.Cart.AccountId)
+                        {
+                            
+                        }
+                        else
+                        {
+                            <button type="submit" class="primary-btn">Save</button>
+                        }
+                        
+                       
+                    </form>
+                    
+                </td>
+                
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPrice)
+                </td>
+                <td>
+                    <form asp-route-pid="@item.Cart?.ProductId" asp-action="EditAdress">
+                <div class="form-group">
+                            <select name="address" style="width: 100px"  asp-for="@item.Cart.Receiving_AddressId" class="form-control" asp-items="ViewBag.ad"></select>
+                </div>
+                        @if (@item.ProductSolds != null && @item.Cart != null && @item.ProductSolds.ProductId == @item.Cart.ProductId && @item.ProductSolds.UId == @item.Cart.AccountId)
+                        {
+
+                        }else{
+                        <button style="background-color: orchid" type="submit" class="primary-btn">Change Address</button>
+                         
+                        }
+                    </form>
+
+                    @if (@item.ProductSolds != null && @item.Cart != null && @item.ProductSolds.ProductId == @item.Cart.ProductId && @item.ProductSolds.UId == @item.Cart.AccountId)
+                    {
+
+                    }
+                    else
+                    {
+                        <p>
+                            <button style="background-color: orchid" type="submit" class="primary-btn"><a asp-action="AddAddress">Create New Product</a></button>
+                        </p>
+                    }
+                    
+                     </td>
+                <td>
+                    <div style="display: flex">
+                        @if (@item.ProductSolds != null && @item.Cart != null && @item.ProductSolds.ProductId == @item.Cart.ProductId && @item.ProductSolds.UId == @item.Cart.AccountId)
+                        {
+                            <span class="processing-text">Processing...</span>
+                        }
+                        else
+                        {
+                            <a asp-action="BuyProduct" asp-controller="Home" asp-route-pId="@item.Cart?.ProductId" asp-route-cId="@item.Cart.CartId" asp-route-address="@item.Cart.Receiving_AddressId" class="custom-link buy-button">Buy</a>
+                            <span class="separator">||</span>
+                            <a asp-action="DeleteCart" data-cart-id="@item.Cart.CartId" asp-route-cId="@item.Cart.CartId" class="btnDelete"> Delete</a>
+                        }
+                    </div>
+                </td>
+                
+        </tr>
+}
+    </tbody>
+</table>
+<div class="product__pagination">
+    @Html.PagedListPager(Model, page =>Url.Action("ListCart", new{page=page}))
+</div>
+<script>
+    $(document).ready(function () {
+        $(".btnDelete").click(function () {
+            var cId = $(this).data("cart-id");
+
+            $.ajax({
+                url: '/Home/DeleteCart',
+                type: 'POST',
+                data: { cId: cId },
+                success: function (data) {
+                    if (data.success) {
+                        // Xử lý thành công
+                        alert(data.message);
+                        // Cập nhật giao diện người dùng (nếu cần thiết)
+                        location.reload();
+                    } else {
+                        // Xử lý lỗi
+                        alert(data.message);
+                    }
+                },
+                error: function () {
+                    console.log('Đã xảy ra lỗi');
+                }
+            });
+        });
+    });
+</script>

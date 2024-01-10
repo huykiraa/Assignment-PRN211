@@ -1,0 +1,57 @@
+﻿@model Project_PRN211.Models.Category
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Text
+@using System.Text.Encodings.Web
+@{
+    ViewData["Title"] = "ThemLoaiSanPham";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+
+}
+
+<h1>ThemLoaiSanPham</h1>
+<head>
+    <meta charset="utf-8" />
+    <!-- other head elements -->
+</head>
+<h4>Category</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ThemLoaiSanPham">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Cid" value="0" />
+            <div class="form-group">
+                <label asp-for="Cname" class="control-label"></label>
+                <input asp-for="Cname" class="form-control" />
+                <span asp-validation-for="Cname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Đợi tất cả các phần tử HTML được tải xong trước khi thực hiện
+        var categoryList = document.getElementById('categoryList');
+
+        // Kiểm tra xem phần tử có tồn tại không
+        if (categoryList) {
+            // Lấy danh sách các phần tử con trong phần tử có id là categoryList
+            var categoryElements = categoryList.querySelectorAll('.row');
+
+            // Đếm số lượng phần tử và thêm 1
+            var count = categoryElements.length + 1;
+
+            // Gán giá trị mới cho thuộc tính value của input hidden
+            document.querySelector('input[name="Cid"]').value = count;
+        }
+    });
+</script>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

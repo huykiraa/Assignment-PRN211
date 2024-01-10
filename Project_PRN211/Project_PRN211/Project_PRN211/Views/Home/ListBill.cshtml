@@ -1,0 +1,68 @@
+﻿@using Project_PRN211.Models;
+@using X.PagedList.Mvc.Core;
+@using static Project_PRN211.Controllers.HomeController;
+@model X.PagedList.IPagedList<CartProductViewModel>
+
+@{
+    ViewData["Title"] = "ListBill";
+    Layout = "~/Views/Shared/_LayoutOgani.cshtml";
+}
+
+<h1>Orders</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Title
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>
+                ToTal
+            </th>
+            <th>
+                Receiving Address
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <td>
+                    <img src="@item.Product.Image" alt="Product Image" style="max-width: 100px; max-height: 100px;" />
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cart.Amount)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReceivingAddress.Address)
+                </td>
+            <td>
+                    <a asp-action="DeleteBill" asp-route-Id="@item.ProductSolds.Id" class="custom-link delete-link">Cancel order</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<div class="product__pagination">
+    @Html.PagedListPager(Model, page =>Url.Action("ListBill", new{page=page}))
+</div>

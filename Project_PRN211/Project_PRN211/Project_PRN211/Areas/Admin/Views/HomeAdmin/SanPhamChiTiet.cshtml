@@ -1,0 +1,16 @@
+﻿@model List<Project_PRN211.Models.Product>
+
+<h2>Product Details</h2>
+
+@foreach (var product in Model)
+{
+    <div>
+        <h3>Name: @product.Name</h3>
+        <p>Price: @product.Price</p>
+        <p>Title: @product.Title</p>
+        <p>Description: @product.Description</p>
+        <p>Category: @ViewBag.CateName</p>
+        <p>Seller: @ViewBag.Seller</p>
+        <!-- Add other properties as needed -->
+    </div>
+}
